@@ -1,0 +1,24 @@
+
+> digital-asset-manager@0.1.0 dev /app
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+✓ Ready in 1124ms
+○ Compiling / ...
+ GET / 307 in 5.5s (compile: 5.0s, render: 460ms)
+○ Compiling /dashboard ...
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+ GET /dashboard 200 in 14.9s (compile: 13.5s, render: 1366ms)
+ GET /gallery 200 in 1979ms (compile: 1925ms, render: 54ms)
+✓ Compiled in 60ms
