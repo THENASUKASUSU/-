@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
+import { get, set as idbSet, del } from 'idb-keyval';
 import { Asset, Folder, User, AssetVersion } from './types';
 
 interface DAMStore {
@@ -25,6 +26,19 @@ interface DAMStore {
 
   setUser: (user: User | null) => void;
 }
+
+// Custom storage using IndexedDB for unlimited capacity
+const indexedDBStorage: StateStorage = {
+  getItem: async (name: string): Promise<string | null> => {
+    return (await get(name)) || null;
+  },
+  setItem: async (name: string, value: string): Promise<void> => {
+    await idbSet(name, value);
+  },
+  removeItem: async (name: string): Promise<void> => {
+    await del(name);
+  },
+};
 
 // Mock initial data
 const initialAssets: Asset[] = [
@@ -133,7 +147,7 @@ export const useDAMStore = create<DAMStore>()(
     }),
     {
       name: 'dam-storage',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => indexedDBStorage),
     }
   )
 );
