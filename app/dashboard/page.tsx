@@ -17,9 +17,9 @@ import {
   Files,
   HardDrive,
   Image as ImageIcon,
-  Video,
-  FileText
+  Video
 } from "lucide-react"
+import { formatSize } from "@/lib/utils"
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -27,13 +27,6 @@ export default function DashboardPage() {
   const { assets } = useDAMStore()
 
   const totalSize = assets.reduce((acc, curr) => acc + curr.size, 0)
-  const formatSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  }
 
   const typeData = [
     { name: 'Images', value: assets.filter(a => a.type === 'image').length },
@@ -44,7 +37,6 @@ export default function DashboardPage() {
 
   const storageData = [
     { name: 'Used', value: totalSize / (1024 * 1024) }, // in MB
-    { name: 'Free', value: 2048 - (totalSize / (1024 * 1024)) }, // Assume 2GB total
   ]
 
   return (
@@ -116,41 +108,42 @@ export default function DashboardPage() {
           </ResponsiveContainer>
         </GlassCard>
 
-        <GlassCard className="lg:col-span-3 h-[400px]">
+        <GlassCard className="lg:col-span-3 h-[400px] flex flex-col">
           <h3 className="font-semibold mb-6">Storage Usage (MB)</h3>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={storageData}
-                cx="50%"
-                cy="45%"
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={5}
-                dataKey="value"
-              >
+          <div className="flex-1 min-h-0">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={storageData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
                 {storageData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  backdropFilter: 'blur(10px)'
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="flex justify-center gap-4 text-sm">
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    backdropFilter: 'blur(10px)'
+                  }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex flex-col items-center gap-2 text-sm">
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-full bg-blue-500" />
-              <span>Used</span>
+              <span>Used: {formatSize(totalSize)}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-emerald-500" />
-              <span>Free</span>
+            <div className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-xs font-semibold">
+              Unlimited Capacity
             </div>
           </div>
         </GlassCard>

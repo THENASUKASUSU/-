@@ -4,16 +4,15 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   LayoutDashboard,
-  FolderOpen,
   Upload,
   GalleryVertical,
   BarChart3,
   User,
-  Settings,
   ChevronRight
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, formatSize } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { useDAMStore } from "@/lib/store"
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -25,6 +24,9 @@ const navItems = [
 
 export function GlassSidebar() {
   const pathname = usePathname()
+  const { assets } = useDAMStore()
+
+  const totalSize = assets.reduce((acc, curr) => acc + curr.size, 0)
 
   return (
     <aside className="hidden md:flex flex-col w-64 glass-card border-l-0 border-t-0 border-b-0 rounded-none h-screen sticky top-0">
@@ -57,11 +59,16 @@ export function GlassSidebar() {
 
       <div className="p-4 mt-auto">
         <div className="glass-card bg-white/5 p-4 rounded-xl border-white/10">
-          <p className="text-xs text-muted-foreground mb-2">Storage Usage</p>
-          <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-primary w-2/3" />
+          <div className="flex justify-between items-end mb-2">
+            <p className="text-xs text-muted-foreground">Storage</p>
+            <span className="text-[10px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-500 rounded font-medium">Unlimited</span>
           </div>
-          <p className="text-[10px] mt-2 text-right font-mono">1.2GB / 2GB</p>
+          <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+            <div className="h-full bg-primary w-full opacity-20" />
+          </div>
+          <p className="text-[10px] mt-2 text-right font-mono text-muted-foreground">
+            Used: <span className="text-foreground">{formatSize(totalSize)}</span>
+          </p>
         </div>
       </div>
     </aside>
