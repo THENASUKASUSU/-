@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { motion, AnimatePresence } from "framer-motion"
-import { Upload, X, File, CheckCircle2, Loader2, AlertCircle } from "lucide-react"
+import { Upload, X, File, CheckCircle2, Loader2 } from "lucide-react"
 import { GlassCard } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useDAMStore } from "@/lib/store"
@@ -83,26 +83,80 @@ export default function UploadPage() {
         <p className="text-muted-foreground">Drag and drop files to add them to your digital library.</p>
       </div>
 
-      <GlassCard
-        {...getRootProps()}
-        className={cn(
-          "border-2 border-dashed transition-all cursor-pointer h-64 flex flex-col items-center justify-center gap-4",
-          isDragActive ? "border-primary bg-primary/5 scale-[1.01]" : "border-white/10 hover:border-white/20"
-        )}
+      <motion.div
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
       >
-        <input {...getInputProps()} />
-        <div className="p-4 bg-primary/10 rounded-full">
-          <Upload className="h-8 w-8 text-primary" />
+        <div {...getRootProps()}>
+        <GlassCard
+          className={cn(
+            "border-2 border-dashed transition-all cursor-pointer h-80 flex flex-col items-center justify-center gap-6 relative overflow-hidden group",
+            isDragActive ? "border-blue-500 bg-blue-500/10" : "border-white/10 hover:border-white/20"
+          )}
+        >
+          <input {...getInputProps()} />
+
+          {/* Liquid background effect on drag */}
+          <AnimatePresence>
+            {isDragActive && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                className="absolute inset-0 z-0"
+              >
+                <div className="absolute inset-0 bg-blue-500/20 animate-pulse" />
+                <motion.div
+                  animate={{
+                    rotate: 360,
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle,rgba(59,130,246,0.2)_0%,transparent_70%)]"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="relative z-10 flex flex-col items-center gap-6">
+            <motion.div
+              animate={isDragActive ? { y: [0, -10, 0] } : {}}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="p-6 bg-blue-500/20 rounded-3xl shadow-2xl shadow-blue-500/20 border border-white/10"
+            >
+              <Upload className={cn("h-12 w-12 transition-colors", isDragActive ? "text-blue-400" : "text-primary")} />
+            </motion.div>
+
+            <div className="text-center">
+              <p className="text-2xl font-bold bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent">
+                {isDragActive ? "Release to start" : "Ready to expand your library?"}
+              </p>
+              <p className="text-muted-foreground mt-2 max-w-xs mx-auto">
+                Drag and drop your files anywhere on this card to begin the secure upload process.
+              </p>
+            </div>
+
+            {!isDragActive && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex gap-4 mt-2"
+              >
+                <span className="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-white/5 border border-white/5">Images</span>
+                <span className="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-white/5 border border-white/5">Videos</span>
+                <span className="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-white/5 border border-white/5">Documents</span>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Decorative corner accents */}
+          <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-white/10 rounded-tl-lg" />
+          <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-white/10 rounded-tr-lg" />
+          <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-white/10 rounded-bl-lg" />
+          <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-white/10 rounded-br-lg" />
+        </GlassCard>
         </div>
-        <div className="text-center">
-          <p className="text-lg font-medium">
-            {isDragActive ? "Drop files here" : "Click or drag files to upload"}
-          </p>
-          <p className="text-sm text-muted-foreground mt-1">
-            Supports Images, Videos, PDFs and Audio files
-          </p>
-        </div>
-      </GlassCard>
+      </motion.div>
 
       <div className="space-y-4">
         <h3 className="font-semibold flex items-center gap-2">

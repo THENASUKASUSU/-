@@ -11,8 +11,8 @@ export function GlassNavbar() {
   const { searchQuery, setSearchQuery } = useDAMStore()
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-background/30 border-b border-white/10 px-4 md:px-6 h-16 flex items-center justify-between">
-      <div className="flex items-center gap-4 flex-1">
+    <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-slate-950/20 border-b border-white/5 px-4 md:px-8 h-20 flex items-center justify-between transition-all duration-500">
+      <div className="flex items-center gap-6 flex-1">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="md:hidden">
@@ -24,11 +24,11 @@ export function GlassNavbar() {
           </SheetContent>
         </Sheet>
 
-        <div className="relative max-w-md w-full hidden sm:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="relative max-w-md w-full hidden sm:block group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-blue-400" />
           <GlassInput
-            placeholder="Search assets, tags..."
-            className="pl-10 h-10 w-full"
+            placeholder="Search your vault..."
+            className="pl-11 h-11 w-full bg-white/5 border-white/5 focus:bg-white/10 transition-all duration-300 rounded-xl"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

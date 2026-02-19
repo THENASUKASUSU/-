@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GlassSidebar } from "@/components/glass-sidebar";
 import { GlassNavbar } from "@/components/glass-navbar";
+import { HeroBackground } from "@/components/hero-background";
+import { QuickActionMenu } from "@/components/quick-action-menu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,12 +43,8 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans selection:bg-primary/30`}>
-        <div className="flex min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-foreground overflow-x-hidden">
-          {/* Background effects */}
-          <div className="fixed inset-0 pointer-events-none">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full animate-glow" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full animate-glow [animation-delay:2s]" />
-          </div>
+        <div className="flex min-h-screen text-foreground overflow-x-hidden">
+          <HeroBackground />
 
           <GlassSidebar />
 
@@ -56,6 +54,7 @@ export default function RootLayout({
               {children}
             </main>
           </div>
+          <QuickActionMenu />
         </div>
       </body>
     </html>
