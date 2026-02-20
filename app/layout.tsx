@@ -46,7 +46,7 @@ export default function RootLayout({
         <div className="flex min-h-screen text-foreground overflow-x-hidden">
           <HeroBackground />
 
-          <GlassSidebar />
+          <GlassSidebar className="hidden md:flex" />
 
           <div className="flex-1 flex flex-col relative z-10">
             <GlassNavbar />

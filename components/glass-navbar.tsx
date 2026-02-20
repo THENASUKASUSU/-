@@ -20,7 +20,7 @@ export function GlassNavbar() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 border-none w-64 bg-transparent">
-            <GlassSidebar />
+            <GlassSidebar className="flex" />
           </SheetContent>
         </Sheet>
 

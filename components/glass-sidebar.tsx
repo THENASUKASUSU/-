@@ -23,11 +23,11 @@ const navItems = [
 
 import { motion } from "framer-motion"
 
-export function GlassSidebar() {
+export function GlassSidebar({ className }: { className?: string }) {
   const pathname = usePathname()
 
   return (
-    <aside className="hidden md:flex flex-col w-64 glass-card border-l-0 border-t-0 border-b-0 rounded-none h-screen sticky top-0 z-50">
+    <aside className={cn("flex flex-col w-64 glass-card border-l-0 border-t-0 border-b-0 rounded-none h-screen sticky top-0 z-50", className)}>
       <div className="p-8">
         <motion.h1
           initial={{ opacity: 0, x: -20 }}
@@ -42,21 +42,23 @@ export function GlassSidebar() {
         {navItems.map((item, idx) => {
           const isActive = pathname === item.href
           return (
-            <Link key={item.href} href={item.href}>
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.05 }}
+            <motion.div
+              key={item.href}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.05 }}
+            >
+              <Button
+                asChild
+                variant={isActive ? "glass-primary" : "ghost"}
+                className={cn(
+                  "w-full justify-start gap-4 px-4 h-12 transition-all duration-500 rounded-xl relative overflow-hidden group",
+                  isActive
+                    ? "bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)] text-white"
+                    : "hover:bg-white/5 text-muted-foreground hover:text-white"
+                )}
               >
-                <Button
-                  variant={isActive ? "glass-primary" : "ghost"}
-                  className={cn(
-                    "w-full justify-start gap-4 px-4 h-12 transition-all duration-500 rounded-xl relative overflow-hidden group",
-                    isActive
-                      ? "bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)] text-white"
-                      : "hover:bg-white/5 text-muted-foreground hover:text-white"
-                  )}
-                >
+                <Link href={item.href}>
                   {isActive && (
                     <motion.div
                       layoutId="active-nav"
@@ -66,9 +68,9 @@ export function GlassSidebar() {
                   <item.icon className={cn("h-5 w-5 transition-transform duration-500 group-hover:scale-110", isActive ? "text-blue-400" : "")} />
                   <span className="font-medium tracking-tight">{item.name}</span>
                   {isActive && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}><ChevronRight className="ml-auto h-4 w-4 text-blue-400" /></motion.div>}
-                </Button>
-              </motion.div>
-            </Link>
+                </Link>
+              </Button>
+            </motion.div>
           )
         })}
       </nav>
